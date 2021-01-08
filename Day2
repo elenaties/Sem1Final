@@ -54,6 +54,7 @@ def fib_rabbits(gen,offspring):
 ## percentage. Then, it returns the name of the strand and the percentage. 
 
 def gc_count(fasta_file):
+## copy and pasted the read fasta from Lab 2. Is this okay?
     f = open(fasta_file,'r') 
     flines = f.readlines()
     sequence=''
