@@ -31,7 +31,7 @@ def fib_rabbits(gen,offspring):
     while count<gen: 
         count=count+1 #counter counts number of generations calculated for
 
-        # calculates for special case of 1st generation
+        # calculate for special case of 1st generation
         if count==1:
             babies=1
             adults=0
