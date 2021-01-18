@@ -1,0 +1,199 @@
+## Lab 4, Semester 1 Final Project 
+## Elena Tiedens 
+
+##This function counts the number of each type of base in a DNA strand 
+def count_nucl(strand):
+    A=strand.count('A')
+    C=strand.count('C')
+    G=strand.count('G')
+    T=strand.count('T')
+    return A, C, G, T
+    ## should they print without parenthesis?
+
+##This function converts a DNA strand to an RNA strand with U's instead of T's
+def to_RNA(strand):
+    return strand.replace('T','U')
+
+## This function returns the reverse compliment of a given DNA strand
+def to_revcomp(strand):
+    rev=strand[::-1]
+    rev=rev.replace('A','t')
+    rev=rev.replace('T','a')
+    rev=rev.replace('C','g')
+    rev=rev.replace('G','c')
+    rev=rev.upper()
+    return rev
+
+## This function has an input of number of generations and offspring per rabit pair to find the number of rabbits after a given 
+## amount of generation.
+def fib_rabbits(gen,offspring):
+    count=0 
+    while count<gen: 
+        count=count+1 #counter counts number of generations calculated for
+
+        # calculates for special case of 1st generation
+        if count==1:
+            babies=1
+            adults=0
+        
+        # calculates for special case of 2nd generation
+        if count==2:
+            babies=0
+            adults=1
+            
+        
+        if count>=3:
+            varhold=babies #place holder for babies of previous generation
+            babies=offspring*adults
+            adults=adults+varhold
+
+    return adults+babies
+
+
+## The gc_count(fasta_file) function examines various DNA strands in a fasta file in order to find the one with the largest GC 
+## percentage. Then, it returns the name of the strand and the percentage. 
+
+def gc_count(fasta_file):
+    # open and read the fasta file
+    f = open(fasta_file,'r') 
+    flines = f.readlines()
+    sequence=''
+    key=''
+    value=''
+    fastadict={}
+    # The below for loop defines the keys and values of the strand name and values dictionary.
+    for line in flines:
+            if line[0]=='>':
+                key=line.strip('>').strip()
+                fastadict[key]=''
+
+        
+            if line[0]!='>':
+                line=sequence+line
+                value=line.strip()
+                fastadict[key]=fastadict[key]+line.strip('\n')
+
+    # the below for loop creates a dictionary with the strand name as keys and the GC percentages as values
+    percentagedict={}
+    for seqname,seqstring in fastadict.items(): 
+        Gcount=seqstring.count('G')
+        Ccount=seqstring.count('C')
+        GCtotal=Gcount+Ccount
+        totallen=len(seqstring)
+        perc=(GCtotal/totallen)*100
+        percentagedict[seqname]=perc #defines dictionary with DNA strands as keys and percentages as value 
+        
+    ## This section of code makes a percentage list that contains the GC percentage from each considered strand
+    percentagelist=[]
+    for value in percentagedict: 
+        percentagelist.append(percentagedict[value])
+    
+    
+    maxperc=max(percentagelist) #finds max percentage from percentage list
+    maxindex=percentagelist.index(maxperc) #finds index of max percentage
+    namelist=list(percentagedict.keys()) #makes a list of strand names whose indices correspond to the indices of their respective
+    # percentages on the percentage list
+    return namelist[maxindex], maxperc
+
+
+## The below function hamdist(DNA1, DNA2) returns to Hamming Distance between the two DNA strands. The Hamming Distance essentially
+## quanitifies the number of point mutations between the two DNA strands. 
+
+def hamdist(DNA1,DNA2):
+    hamdist=0
+    index=-1
+    for val1 in DNA1:
+        index=index+1 #find index of value from string 1
+        val2=DNA2[index] #find the corresponding value on string 2
+        if val1!=val2:
+            hamdist=hamdist+1 #calculate hamdist if the values at the same index on the different strings do not match
+    
+    return hamdist
+
+
+## The below function mendel_probability(k,m,n) returns the probability that the offspring of randomly selected individuals from
+## the categories k(homozygous dominant), m(heterozygous), and n(homozygous recessive) will have a dominant genotype 
+
+def mendel_probability(k,m,n):
+    #find the probability of each phenotype for one of the parents 
+    total=k+m+n
+    k1=k/total
+    m1=m/total
+    n1=n/total
+    
+    
+    #find the probability of each phenotype for the couple 
+    kk=k1*k1
+    km=k1*m1
+    kn=k1*n1
+    mk=k1*m1
+    mn=m1*n1
+    mm=m1*m1
+    nm=n1*m1
+    nk=n1*k1
+    nn=n1*n1
+    # define total probability that each set of parents will occur
+    fkk=kk
+    fmm=mm
+    fnn=nn
+    fkm=km+mk
+    fmn=mn+nm
+    fnk=nk+kn 
+
+    #find the probability of the dominant phenotype occuring when the two parents have offspring 
+    #used Punnet Squares to find this probability based on different sets of parents
+    domfkk=1
+    domfmm=3/4
+    domfnn=0
+    domfkm=1
+    domfmn=1/2
+    domfnk=1
+    
+    domprob=(domfkk*fkk)+(domfmm*fmm)+(domfnn*fnn)+(domfkm*fkm)+(domfmn*fmn)+(domfnk*fnk)
+    return domprob
+
+
+def motif(string, substring):
+    count=0
+    locationlist=[]
+    newbaselist=[]
+    while count<len(string):
+        newbaselist.append(string[count])
+        count=count+1
+        print(newbaselist)
+
+        if (string.find(substring)==-1):
+            pass
+
+        else: 
+            locationlist.append(string.index(substring))
+            
+         
+        
+    return locationlist
+
+    ## another possibility 
+
+    locationlist=[]
+    for index in range(len(string)):
+            if string[index]==substring[0]:
+                start=index
+                sub=string[start:]
+                end=start+sub.find(substring[len(substring)-1])
+                locationlist.append(start)
+                return locationlist
+    
+
+print(motif('GATATATGCATATACTT', 'ATAT'))
+
+
+
+
+
+
+
+
+
+
+        
+        
